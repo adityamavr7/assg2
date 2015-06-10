@@ -26,10 +26,69 @@ import java.util.Queue;
  * @author Len Payne <len.payne@lambtoncollege.ca>
  */
 public class OrderQueue {
+
     Queue<Order> orderQueue = new ArrayDeque<>();
-    
-    public void add(Order order) {
+    Queue<Order> processing = new ArrayDeque<>();
+
+    public void add(Order order)
+    {
+        if (order.getCustomerId().isEmpty() && order.getCustomerName().isEmpty()) {
+            throw new NoCustomerException();
+        }
+        if (order.getListOfPurchases().isEmpty()) 
+        {
+            throw new NoPurchasesException();
+        }
         orderQueue.add(order);
         order.setTimeReceived(new Date());
     }
+
+    public Order next()
+    {
+        return orderQueue.peek();
+    }
+
+    public void process(Order order)
+    {
+
+        
+        if (order.getTimeReceived() != null)
+        {
+            
+                order.setTimeProcessed(new Date());
+            }
+         else{
+            throw new RuntimeException();
+        }
+
+    }
+
+    public void fulfill(Order order) 
+    {
+        if (order.getTimeProcessed() == null)
+        {
+            throw new RuntimeException();
+        }if (order.getTimeReceived() == null)
+        {
+            throw new RuntimeException();
+        } 
+    }
+
+    
+    public String report()
+    {
+
+        if (orderQueue.isEmpty()) {
+            return "";
+        } 
+            return "";
+    }
+
+    private class NoCustomerException extends RuntimeException {
+    }
+
+    
+    private class NoPurchasesException extends RuntimeException {
+    }
+
 }
